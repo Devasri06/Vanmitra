@@ -11,6 +11,9 @@ import SupportModal from './SupportModal';
 import PetitionModal from './PetitionModal';
 import FRAMap from './FRAMap';
 import { schemes, states, districts, tribalGroups } from '@/data/mockData';
+import heroForest from '@/assets/hero-forest.jpg';
+import schemesIllustration from '@/assets/schemes-illustration.jpg';
+import forestPattern from '@/assets/forest-pattern.jpg';
 
 const LandingPage = () => {
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
@@ -29,9 +32,18 @@ const LandingPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/5">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/5 relative">
+      {/* Hero Background */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-5"
+        style={{ backgroundImage: `url(${heroForest})` }}
+      />
+      <div 
+        className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10"
+      />
+      
       {/* Header */}
-      <header className="border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
+      <header className="relative border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -77,14 +89,41 @@ const LandingPage = () => {
       </header>
 
       {/* Main Content */}
-      <div className={`flex transition-all duration-300 ${isMapFullscreen ? 'fixed inset-0 z-50' : 'min-h-[calc(100vh-80px)]'}`}>
+      <div className={`relative flex transition-all duration-300 ${isMapFullscreen ? 'fixed inset-0 z-50' : 'min-h-[calc(100vh-80px)]'}`}>
         {/* Left Panel - Schemes */}
-        <div className={`bg-card border-r transition-all duration-300 ${isMapFullscreen ? 'w-0 overflow-hidden' : 'w-full lg:w-1/2'}`}>
-          <div className="p-6 space-y-6">
+        <div className={`bg-card/95 backdrop-blur border-r transition-all duration-300 relative ${isMapFullscreen ? 'w-0 overflow-hidden' : 'w-full lg:w-1/2'}`}>
+          {/* Background Pattern */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-5"
+            style={{ backgroundImage: `url(${forestPattern})` }}
+          />
+          <div className="relative p-6 space-y-6 z-10">
+            {/* Hero Section */}
+            <div className="relative mb-6">
+              <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-6 border border-primary/20">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-2xl font-bold text-primary mb-2">Forest Rights Schemes</h2>
+                    <p className="text-muted-foreground">Empowering forest communities through accessible government schemes</p>
+                  </div>
+                  <div className="hidden md:block">
+                    <img 
+                      src={schemesIllustration} 
+                      alt="Government schemes illustration"
+                      className="w-32 h-24 object-cover rounded-lg opacity-80"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Filters */}
-            <Card>
+            <Card className="border-primary/20 bg-card/80 backdrop-blur">
               <CardHeader>
-                <CardTitle className="text-lg">Filters</CardTitle>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  Filters
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Input
@@ -137,14 +176,19 @@ const LandingPage = () => {
             </Card>
 
             {/* Schemes List */}
-            <Card>
+            <Card className="border-primary/20 bg-card/80 backdrop-blur">
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-lg">Available Schemes</CardTitle>
-                <Badge variant="secondary">{filteredSchemes.length} schemes</Badge>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <div className="w-2 h-2 bg-accent rounded-full"></div>
+                  Available Schemes
+                </CardTitle>
+                <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/20">
+                  {filteredSchemes.length} schemes
+                </Badge>
               </CardHeader>
               <CardContent className="space-y-4">
                 {filteredSchemes.map((scheme) => (
-                  <Card key={scheme.id} className="border-l-4 border-l-primary">
+                  <Card key={scheme.id} className="border-l-4 border-l-primary bg-card/60 backdrop-blur hover:bg-card/80 transition-all duration-200 hover:shadow-lg hover:scale-[1.02]">
                     <CardContent className="p-4">
                       <div className="space-y-2">
                         <div className="flex items-start justify-between">
@@ -166,7 +210,7 @@ const LandingPage = () => {
             </Card>
 
             {/* Petition Section */}
-            <Card className="border-orange-200 bg-orange-50/50">
+            <Card className="border-orange-200 bg-gradient-to-r from-orange-50/50 to-yellow-50/50 backdrop-blur">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center space-x-2">
                   <AlertCircle className="w-5 h-5 text-orange-500" />

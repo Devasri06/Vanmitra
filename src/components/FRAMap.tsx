@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Layers, MapPin, Settings } from 'lucide-react';
 import { mapLayers } from '@/data/mockData';
+import mapPlaceholder from '@/assets/map-placeholder.jpg';
 
 const FRAMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -140,8 +141,15 @@ const FRAMap = () => {
 
   if (!mapboxToken) {
     return (
-      <div className="h-full flex items-center justify-center bg-muted">
-        <Card className="w-96">
+      <div className="h-full flex items-center justify-center bg-muted relative">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{ backgroundImage: `url(${mapPlaceholder})` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10" />
+        
+        <Card className="w-96 relative z-10 bg-card/95 backdrop-blur border-primary/20">
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Settings className="w-5 h-5" />
