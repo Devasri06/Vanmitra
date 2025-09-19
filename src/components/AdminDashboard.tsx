@@ -46,8 +46,8 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/5">
       {/* Header */}
       <header className="border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
+        <div className="container mx-auto px-2 sm:px-4 py-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
                 <TreePine className="w-6 h-6 text-primary-foreground" />
@@ -71,9 +71,9 @@ const AdminDashboard = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-2 sm:px-4 py-6">
         {/* Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
           <Card className="border-l-4 border-l-primary">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Claims</CardTitle>
@@ -125,7 +125,7 @@ const AdminDashboard = () => {
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="map" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
             <TabsTrigger value="map">FRA Atlas</TabsTrigger>
             <TabsTrigger value="claims">Claims Management</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -142,7 +142,7 @@ const AdminDashboard = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="h-[600px]">
+                <div className="h-[300px] sm:h-[400px] md:h-[600px]">
                   <FRAMap />
                 </div>
               </CardContent>
@@ -153,7 +153,7 @@ const AdminDashboard = () => {
           <TabsContent value="claims" className="space-y-6">
             <Card>
               <CardHeader className="space-y-4">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
                   <CardTitle className="flex items-center space-x-2">
                     <Users className="w-5 h-5" />
                     <span>Claims Management</span>
@@ -161,8 +161,8 @@ const AdminDashboard = () => {
                   <Badge variant="secondary">{adminStats.totalClaims} total claims</Badge>
                 </div>
                 
-                <div className="flex items-center space-x-4">
-                  <div className="relative flex-1 max-w-sm">
+                <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                  <div className="relative flex-1 w-full max-w-sm">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input
                       placeholder="Search by name, village, or claim ID..."
@@ -171,7 +171,7 @@ const AdminDashboard = () => {
                       className="pl-10"
                     />
                   </div>
-                  <Button variant="outline" onClick={() => exportData('claims')}>
+                  <Button variant="outline" onClick={() => exportData('claims')} className="w-full sm:w-auto">
                     <Download className="w-4 h-4 mr-2" />
                     Export Claims
                   </Button>
@@ -185,7 +185,7 @@ const AdminDashboard = () => {
 
           {/* Analytics Tab */}
           <TabsContent value="analytics" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle>Monthly Approval Trends</CardTitle>
@@ -266,16 +266,16 @@ const AdminDashboard = () => {
               <CardContent>
                 <div className="space-y-4">
                   {activityLogs.map((log) => (
-                    <div key={log.id} className="flex items-start space-x-3 p-4 border rounded-lg">
+                    <div key={log.id} className="flex flex-col sm:flex-row items-start space-x-0 sm:space-x-3 p-4 border rounded-lg">
                       <div className="mt-1">
                         {log.action.includes('Approved') && <CheckCircle className="w-4 h-4 text-green-500" />}
                         {log.action.includes('Rejected') && <XCircle className="w-4 h-4 text-red-500" />}
                         {log.action.includes('Updated') && <Eye className="w-4 h-4 text-blue-500" />}
                       </div>
-                      <div className="flex-1 space-y-1">
-                        <div className="flex items-center justify-between">
+                      <div className="flex-1 space-y-1 mt-2 sm:mt-0">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
                           <p className="text-sm font-medium">{log.action}</p>
-                          <Badge variant="outline" className="text-xs">{log.claimId}</Badge>
+                          <Badge variant="outline" className="text-xs mt-1 sm:mt-0">{log.claimId}</Badge>
                         </div>
                         <p className="text-sm text-muted-foreground">{log.details}</p>
                         <p className="text-xs text-muted-foreground">

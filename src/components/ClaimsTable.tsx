@@ -76,26 +76,26 @@ const ClaimsTable = ({ searchQuery }: ClaimsTableProps) => {
 
   return (
     <>
-      <div className="rounded-md border">
-        <Table>
+      <div className="rounded-xl border bg-white shadow-sm overflow-x-auto">
+        <Table className="min-w-[700px]">
           <TableHeader>
-            <TableRow>
-              <TableHead>Claimant Details</TableHead>
-              <TableHead>Location</TableHead>
-              <TableHead>Claim Type</TableHead>
-              <TableHead>Land Area</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Submitted</TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
+            <TableRow className="bg-gray-50">
+              <TableHead className="text-xs sm:text-sm font-semibold text-gray-700">Claimant</TableHead>
+              <TableHead className="text-xs sm:text-sm font-semibold text-gray-700">Location</TableHead>
+              <TableHead className="text-xs sm:text-sm font-semibold text-gray-700">Claim Type</TableHead>
+              <TableHead className="text-xs sm:text-sm font-semibold text-gray-700">Land Area</TableHead>
+              <TableHead className="text-xs sm:text-sm font-semibold text-gray-700">Status</TableHead>
+              <TableHead className="text-xs sm:text-sm font-semibold text-gray-700">Submitted</TableHead>
+              <TableHead className="w-[80px] text-xs sm:text-sm font-semibold text-gray-700">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredClaims.map((claim) => (
-              <TableRow key={claim.id}>
+              <TableRow key={claim.id} className="hover:bg-gray-50 transition">
                 <TableCell>
                   <div className="space-y-1">
-                    <p className="font-medium">{claim.name}</p>
-                    <p className="text-sm text-muted-foreground">{claim.tribalGroup}</p>
+                    <p className="font-semibold text-base text-primary">{claim.name}</p>
+                    <p className="text-xs text-muted-foreground">{claim.tribalGroup}</p>
                   </div>
                 </TableCell>
                 <TableCell>
@@ -107,20 +107,22 @@ const ClaimsTable = ({ searchQuery }: ClaimsTableProps) => {
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-xs px-2 py-1">
                     {claim.claimType.split(' (')[1]?.replace(')', '') || claim.claimType}
                   </Badge>
                 </TableCell>
-                <TableCell>{claim.landArea}</TableCell>
+                <TableCell>
+                  <span className="font-medium text-sm">{claim.landArea}</span>
+                </TableCell>
                 <TableCell>
                   <div className="flex items-center space-x-2">
                     {getStatusIcon(claim.status)}
-                    <Badge variant={getStatusVariant(claim.status)} className="text-xs">
+                    <Badge variant={getStatusVariant(claim.status)} className="text-xs px-2 py-1">
                       {claim.status}
                     </Badge>
                   </div>
                 </TableCell>
-                <TableCell className="text-sm text-muted-foreground">
+                <TableCell className="text-xs text-muted-foreground">
                   {new Date(claim.submittedDate).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
@@ -128,6 +130,7 @@ const ClaimsTable = ({ searchQuery }: ClaimsTableProps) => {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleViewDetails(claim)}
+                    className="rounded-full"
                   >
                     <Eye className="w-4 h-4" />
                   </Button>
@@ -139,46 +142,49 @@ const ClaimsTable = ({ searchQuery }: ClaimsTableProps) => {
       </div>
 
       {filteredClaims.length === 0 && (
-        <div className="text-center py-8">
-          <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <p className="text-lg font-medium">No claims found</p>
+        <div className="text-center py-12">
+          <FileText className="w-14 h-14 text-muted-foreground mx-auto mb-4" />
+          <p className="text-lg font-semibold text-primary">No claims found</p>
           <p className="text-sm text-muted-foreground">
-            Try adjusting your search criteria
+            Try adjusting your search criteria.
           </p>
         </div>
       )}
 
       {/* Claim Details Modal */}
       <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
-        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Claim Details - {selectedClaim?.name}</DialogTitle>
+        <DialogContent className="sm:max-w-2xl w-full max-h-[90vh] overflow-y-auto rounded-2xl p-0">
+          <DialogHeader className="bg-gradient-to-r from-primary/10 to-accent/10 px-6 py-4 rounded-t-2xl">
+            <DialogTitle className="flex items-center gap-2 text-lg">
+              <Eye className="w-5 h-5 text-primary" />
+              Claim Details - <span className="font-bold">{selectedClaim?.name}</span>
+            </DialogTitle>
           </DialogHeader>
 
           {selectedClaim && (
-            <div className="space-y-6">
+            <div className="space-y-6 px-6 py-4">
               {/* Basic Information */}
-              <Card>
+              <Card className="bg-gray-50 border-none shadow-none">
                 <CardHeader>
-                  <CardTitle className="text-sm">Claimant Information</CardTitle>
+                  <CardTitle className="text-base font-semibold">Claimant Information</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm font-medium">Name</p>
-                      <p className="text-sm text-muted-foreground">{selectedClaim.name}</p>
+                      <p className="text-xs font-medium text-muted-foreground">Name</p>
+                      <p className="text-sm font-semibold">{selectedClaim.name}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium">Father's Name</p>
-                      <p className="text-sm text-muted-foreground">{selectedClaim.fatherName}</p>
+                      <p className="text-xs font-medium text-muted-foreground">Father's Name</p>
+                      <p className="text-sm">{selectedClaim.fatherName}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium">Tribal Group</p>
-                      <p className="text-sm text-muted-foreground">{selectedClaim.tribalGroup}</p>
+                      <p className="text-xs font-medium text-muted-foreground">Tribal Group</p>
+                      <p className="text-sm">{selectedClaim.tribalGroup}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium">Location</p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs font-medium text-muted-foreground">Location</p>
+                      <p className="text-sm">
                         {selectedClaim.village}, {selectedClaim.district}, {selectedClaim.state}
                       </p>
                     </div>
@@ -187,37 +193,37 @@ const ClaimsTable = ({ searchQuery }: ClaimsTableProps) => {
               </Card>
 
               {/* Claim Details */}
-              <Card>
+              <Card className="bg-gray-50 border-none shadow-none">
                 <CardHeader>
-                  <CardTitle className="text-sm">Claim Information</CardTitle>
+                  <CardTitle className="text-base font-semibold">Claim Information</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm font-medium">Claim Type</p>
-                      <p className="text-sm text-muted-foreground">{selectedClaim.claimType}</p>
+                      <p className="text-xs font-medium text-muted-foreground">Claim Type</p>
+                      <p className="text-sm">{selectedClaim.claimType}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium">Land Area</p>
-                      <p className="text-sm text-muted-foreground">{selectedClaim.landArea}</p>
+                      <p className="text-xs font-medium text-muted-foreground">Land Area</p>
+                      <p className="text-sm">{selectedClaim.landArea}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium">GPS Coordinates</p>
-                      <p className="text-sm text-muted-foreground">{selectedClaim.gpsCoordinates}</p>
+                      <p className="text-xs font-medium text-muted-foreground">GPS Coordinates</p>
+                      <p className="text-sm">{selectedClaim.gpsCoordinates}</p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium">Submitted Date</p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-xs font-medium text-muted-foreground">Submitted Date</p>
+                      <p className="text-sm">
                         {new Date(selectedClaim.submittedDate).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
 
                   <div>
-                    <p className="text-sm font-medium mb-2">Current Status</p>
+                    <p className="text-xs font-medium text-muted-foreground mb-2">Current Status</p>
                     <div className="flex items-center space-x-2">
                       {getStatusIcon(selectedClaim.status)}
-                      <Badge variant={getStatusVariant(selectedClaim.status)}>
+                      <Badge variant={getStatusVariant(selectedClaim.status)} className="text-xs px-2 py-1">
                         {selectedClaim.status}
                       </Badge>
                     </div>
@@ -226,14 +232,14 @@ const ClaimsTable = ({ searchQuery }: ClaimsTableProps) => {
               </Card>
 
               {/* Documents */}
-              <Card>
+              <Card className="bg-gray-50 border-none shadow-none">
                 <CardHeader>
-                  <CardTitle className="text-sm">Uploaded Documents</CardTitle>
+                  <CardTitle className="text-base font-semibold">Uploaded Documents</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {selectedClaim.documents.map((doc: string, index: number) => (
-                      <div key={index} className="flex items-center space-x-2 p-2 border rounded">
+                      <div key={index} className="flex items-center space-x-2 p-2 border rounded bg-white shadow-sm">
                         <FileText className="w-4 h-4 text-muted-foreground" />
                         <span className="text-sm">{doc}</span>
                       </div>
@@ -243,16 +249,17 @@ const ClaimsTable = ({ searchQuery }: ClaimsTableProps) => {
               </Card>
 
               {/* Status Actions */}
-              <Card>
+              <Card className="bg-gray-50 border-none shadow-none">
                 <CardHeader>
-                  <CardTitle className="text-sm">Update Status</CardTitle>
+                  <CardTitle className="text-base font-semibold">Update Status</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex space-x-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <Button
                       size="sm"
                       onClick={() => handleUpdateStatus(selectedClaim.id, 'Approved')}
                       disabled={selectedClaim.status === 'Approved'}
+                      className="flex-1"
                     >
                       <CheckCircle className="w-4 h-4 mr-2" />
                       Approve
@@ -262,6 +269,7 @@ const ClaimsTable = ({ searchQuery }: ClaimsTableProps) => {
                       size="sm"
                       onClick={() => handleUpdateStatus(selectedClaim.id, 'Rejected')}
                       disabled={selectedClaim.status === 'Rejected'}
+                      className="flex-1"
                     >
                       <XCircle className="w-4 h-4 mr-2" />
                       Reject
@@ -271,6 +279,7 @@ const ClaimsTable = ({ searchQuery }: ClaimsTableProps) => {
                       size="sm"
                       onClick={() => handleUpdateStatus(selectedClaim.id, 'Under Review')}
                       disabled={selectedClaim.status === 'Under Review'}
+                      className="flex-1"
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       Under Review
