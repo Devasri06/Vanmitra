@@ -92,15 +92,16 @@ const AdminLoginModal = ({ open, onOpenChange }: AdminLoginModalProps) => {
             </Alert>
           )}
 
-          <div className="flex justify-end space-x-2">
+          <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
+              className="w-full sm:w-auto"
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading} className="w-full sm:w-auto">
               {loading ? 'Logging in...' : 'Login'}
             </Button>
           </div>
