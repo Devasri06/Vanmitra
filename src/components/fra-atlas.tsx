@@ -1,122 +1,117 @@
-// src/App.tsx
-import React, { useEffect } from "react";
+import React from "react";
+import {
+  MapContainer,
+  TileLayer,
+  LayersControl,
+  Marker,
+  Popup,
+  Circle,
+  Polygon,
+  FeatureGroup,
+} from "react-leaflet";
+import { useNavigate } from "react-router-dom";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-const App: React.FC = () => {
-  useEffect(() => {
-    // Initialize map
-    const map = L.map("map").setView([20.5937, 78.9629], 5);
+// Fix Leaflet default icons in Vite
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: new URL("leaflet/dist/images/marker-icon-2x.png", import.meta.url).toString(),
+  iconUrl: new URL("leaflet/dist/images/marker-icon.png", import.meta.url).toString(),
+  shadowUrl: new URL("leaflet/dist/images/marker-shadow.png", import.meta.url).toString(),
+});
 
-    // Tile layers
-    const osm = L.tileLayer(
-      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      { maxZoom: 19, attribution: "© OpenStreetMap contributors" }
-    ).addTo(map);
+const defaultCenter: [number, number] = [23.3441, 85.3096];
+const defaultZoom = 13;
 
-    const satellite = L.tileLayer(
-      "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-      { maxZoom: 19, attribution: "Tiles © Esri" }
-    );
+const FraAtlas: React.FC = () => {
+  const navigate = useNavigate();
 
-    L.control.layers({ "Street Map": osm, Satellite: satellite }).addTo(map);
-
-    // Random owner names
-    const ownerNames = [
-      "Ramesh","Suresh","Raul","Gopnath","Jabez","Arun","Vikram","Kumar","Ajay","Rahul","Manoj","Vijay"
-    ];
-
-    // States + districts
-    const states = [
-      {
-        name: "Tamil Nadu",
-        districts: [
-          { name: "Chennai", base: [13.0827, 80.2707] },
-          { name: "Coimbatore", base: [11.0168, 76.9558] },
-          { name: "Madurai", base: [9.9252, 78.1198] },
-          { name: "Salem", base: [11.6643, 78.146] },
-          { name: "Erode", base: [11.341, 77.7172] }
-        ]
-      },
-      {
-        name: "Kerala",
-        districts: [
-          { name: "Thiruvananthapuram", base: [8.5241, 76.9366] },
-          { name: "Kochi", base: [9.9312, 76.2673] },
-          { name: "Kozhikode", base: [11.2588, 75.7804] },
-          { name: "Thrissur", base: [10.5276, 76.2144] },
-          { name: "Kollam", base: [8.8932, 76.6141] }
-        ]
-      },
-      // Add other states similarly...
-    ];
-
-    // Generate lands
-    states.forEach((state) => {
-      state.districts.forEach((district) => {
-        // Claimed lands (green) 15 per district
-        for (let i = 0; i < 15; i++) {
-          const lat = district.base[0] + (Math.random() - 0.5) * 0.05;
-          const lng = district.base[1] + (Math.random() - 0.5) * 0.05;
-          const owner = ownerNames[Math.floor(Math.random() * ownerNames.length)];
-
-          L.circle([lat, lng], {
-            radius: 500,
-            color: "green",
-            fillColor: "green",
-            fillOpacity: 0.6
-          }).addTo(map)
-            .bindPopup(
-              `<b>Owner:</b> ${owner}<br/><b>Land:</b> 3 Acres<br/><b>Place:</b> ${district.name}, ${state.name}`
-            );
-        }
-
-        // Free lands (blue) 10 per district
-        for (let i = 0; i < 10; i++) {
-          const lat = district.base[0] + (Math.random() - 0.5) * 0.05;
-          const lng = district.base[1] + (Math.random() - 0.5) * 0.05;
-
-          L.circle([lat, lng], {
-            radius: 500,
-            color: "blue",
-            fillColor: "blue",
-            fillOpacity: 0.6
-          }).addTo(map)
-            .bindPopup(
-              `<b>Land:</b> 3 Acres<br/><b>Place:</b> ${district.name}, ${state.name}<br/><b>Owner:</b> Free`
-            );
-        }
-      });
-    });
-  }, []);
+  const waterBodyPolygon: [number, number][] = [
+    [23.3510579, 85.2963536],
+    [23.3512722, 85.2964823],
+    [23.3516539, 85.296536],
+    [23.3517967, 85.2965789],
+    [23.3519272, 85.2966245],
+    [23.3518656, 85.29689],
+    [23.3518139, 85.2971609],
+    [23.3517918, 85.2973916],
+    [23.3517622, 85.2976142],
+    [23.3515771, 85.297573],
+    [23.3511047, 85.297464],
+    [23.350691, 85.2973782],
+    [23.3507156, 85.2972602],
+    [23.3506713, 85.2971341],
+    [23.350691, 85.2970107],
+    [23.3507322, 85.296956],
+    [23.3507058, 85.2968042],
+    [23.3507944, 85.2966164],
+    [23.3509126, 85.2964501],
+    [23.3510579, 85.2963536],
+  ];
 
   return (
     <div style={{ height: "100vh", width: "100%", position: "relative" }}>
-      <div style={{
-        position: "absolute",
-        top: 16,
-        left: 16,
-        zIndex: 1000
-      }}>
-        <button
-          onClick={() => window.location.href = "/"}
-          style={{
-            padding: "8px 16px",
-            background: "#2563eb",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            cursor: "pointer",
-            fontWeight: "bold"
-          }}
-        >
-          ← Back to Home
-        </button>
-      </div>
-      <div id="map" style={{ height: "100vh", width: "100%" }}></div>
+      {/* Map */}
+      <MapContainer center={defaultCenter} zoom={defaultZoom} style={{ height: "100%", width: "100%" }}>
+        {/* Layer control */}
+        <LayersControl position="topright">
+          <LayersControl.BaseLayer checked name="OpenStreetMap">
+            <TileLayer
+              url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            />
+          </LayersControl.BaseLayer>
+
+          <LayersControl.BaseLayer name="Esri Satellite">
+            <TileLayer
+              url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+              attribution="Esri"
+            />
+          </LayersControl.BaseLayer>
+        </LayersControl>
+
+        {/* Marker */}
+        <Marker position={defaultCenter}>
+          <Popup>
+            <b>Analysis Center</b>
+            <br />
+            FRA Suitability: Medium
+          </Popup>
+        </Marker>
+
+        {/* Circle */}
+        <Circle center={defaultCenter} radius={2000} pathOptions={{ color: "red", fillOpacity: 0.1 }}>
+          <Popup>Analysis Area (2 km radius)</Popup>
+        </Circle>
+
+        {/* Example Polygon */}
+        <FeatureGroup>
+          <Polygon positions={waterBodyPolygon} pathOptions={{ color: "#1E90FF", fillOpacity: 0.6 }}>
+            <Popup>Water Body: Argora Pond</Popup>
+          </Polygon>
+        </FeatureGroup>
+      </MapContainer>
+
+      {/* Back to Home button (overlayed) */}
+      <button
+        onClick={() => navigate("/")}
+        style={{
+          position: "absolute",
+          top: "10px",
+          left: "10px",
+          padding: "8px 12px",
+          background: "white",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+          cursor: "pointer",
+          zIndex: 1000,
+        }}
+      >
+        ⬅ Back to Home
+      </button>
     </div>
   );
 };
 
-export default App;
+export default FraAtlas;

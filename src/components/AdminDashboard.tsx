@@ -3,25 +3,30 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import DSS from "@/components/DSS";
+import UserMap from "./fra-atlas";
+
+
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   PieChart,
   Pie,
   Cell
 } from 'recharts';
-import { 
-  FileText, 
-  CheckCircle, 
-  Clock, 
-  XCircle, 
-  Users, 
+import {
+  FileText,
+  CheckCircle,
+  Clock,
+  XCircle,
+  Users,
   Search,
   Download,
   Eye,
@@ -57,7 +62,7 @@ const AdminDashboard = () => {
                 <p className="text-sm text-muted-foreground">Forest Rights Management Dashboard</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <Button variant="outline" onClick={() => exportData('summary')}>
                 <Download className="w-4 h-4 mr-2" />
@@ -125,29 +130,49 @@ const AdminDashboard = () => {
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="map" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-5">
             <TabsTrigger value="map">FRA Atlas</TabsTrigger>
             <TabsTrigger value="claims">Claims Management</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="logs">Activity Logs</TabsTrigger>
+            <TabsTrigger value="dss">DSS</TabsTrigger>
           </TabsList>
 
+
           {/* FRA Atlas Tab */}
-          <TabsContent value="map" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <TreePine className="w-5 h-5" />
-                  <span>FRA Atlas Map - Administrative View</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="h-[300px] sm:h-[400px] md:h-[600px]">
-                  <FRAMap />
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+<TabsContent value="map" className="space-y-6">
+  <Card>
+    <CardHeader>
+      <CardTitle className="flex items-center space-x-2">
+        <TreePine className="w-5 h-5" />
+        <span>FRA Atlas Map - Administrative View</span>
+      </CardTitle>
+    </CardHeader>
+    <CardContent className="p-0">
+      {/* Inner toggle for UserMap vs FRAMap */}
+      <Tabs defaultValue="fra" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="user">User Map</TabsTrigger>
+          <TabsTrigger value="fra">FRA Map</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="user">
+          <div className="h-[300px] sm:h-[400px] md:h-[600px]">
+            {/* 👇 replace with your actual UserMap component */}
+            <UserMap />
+          </div>
+        </TabsContent>
+
+        <TabsContent value="fra">
+          <div className="h-[300px] sm:h-[400px] md:h-[600px]">
+            <FRAMap />
+          </div>
+        </TabsContent>
+      </Tabs>
+    </CardContent>
+  </Card>
+</TabsContent>
+
 
           {/* Claims Management Tab */}
           <TabsContent value="claims" className="space-y-6">
@@ -160,7 +185,7 @@ const AdminDashboard = () => {
                   </CardTitle>
                   <Badge variant="secondary">{adminStats.totalClaims} total claims</Badge>
                 </div>
-                
+
                 <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
                   <div className="relative flex-1 w-full max-w-sm">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -288,6 +313,12 @@ const AdminDashboard = () => {
               </CardContent>
             </Card>
           </TabsContent>
+          <TabsContent value="dss">
+            <DSS />
+          </TabsContent>
+
+
+
         </Tabs>
       </div>
     </div>
@@ -295,3 +326,5 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+
+
