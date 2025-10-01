@@ -195,8 +195,7 @@ export const analyticsData = {
 };
 
 export const activityLogs = [
-  {
-    id: 1,
+   {id: 1,
     timestamp: "2024-03-15 14:30:25",
     admin: "Admin User",
     action: "Approved claim",
@@ -218,5 +217,61 @@ export const activityLogs = [
     action: "Updated claim status",
     claimId: "FR-2024-003",
     details: "Status changed to Under Review"
+  },
+  {
+    id: 4,
+    timestamp: "2024-03-14 16:20:55",
+    admin: "Admin User",
+    action: "Uploaded supporting document",
+    claimId: "FR-2024-004",
+    details: "Uploaded land ownership certificate"
+  },
+  {
+    id: 5,
+    timestamp: "2024-03-14 13:50:12",
+    admin: "Admin User",
+    action: "Created new claim",
+    claimId: "FR-2024-005",
+    details: "New claim submitted for Seema Sharma"
+  },
+  {
+    id: 6,
+    timestamp: "2024-03-13 18:10:37",
+    admin: "Admin User",
+    action: "Edited claim details",
+    claimId: "FR-2024-006",
+    details: "Updated applicant address"
+  },
+  {
+    id: 7,
+    timestamp: "2024-03-13 14:05:44",
+    admin: "Admin User",
+    action: "Deleted claim",
+    claimId: "FR-2024-007",
+    details: "Claim removed due to duplicate entry"
+  },
+  {
+    id: 8,
+    timestamp: "2024-03-12 11:22:09",
+    admin: "Admin User",
+    action: "Sent claim for review",
+    claimId: "FR-2024-008",
+    details: "Claim sent to senior officer for review"
+  },
+  {
+    id: 9,
+    timestamp: "2024-03-12 09:40:18",
+    admin: "Admin User",
+    action: "Approved claim",
+    claimId: "FR-2024-009",
+    details: "IFR claim for Arjun Singh approved"
+  },
+  {
+    id: 10,
+    timestamp: "2024-03-11 15:35:50",
+    admin: "Admin User",
+    action: "Uploaded supporting document",
+    claimId: "FR-2024-010",
+    details: "Uploaded caste certificate for verification"
   }
 ];

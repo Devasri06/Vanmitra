@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Home as HomeIcon } from 'lucide-react';
 import {
   TreePine, User, FileText, CheckCircle, Clock, XCircle, Leaf, Plus, HelpCircle, AlertCircle
 } from 'lucide-react';
@@ -15,8 +16,9 @@ import { schemes, states, districts, tribalGroups } from '@/data/mockData';
 import heroForest from '@/assets/hero-forest.jpg';
 import schemesIllustration from '@/assets/schemes-illustration.jpg';
 import forestPattern from '@/assets/forest-pattern.jpg';
-import HeroImage from '@/assets/HeroImage.jpg'; 
+import HeroImage from '@/assets/HeroImage.jpg';
 import { useNavigate } from 'react-router-dom';
+import MoTA_logo from '@/assets/MoTA_logo.jpg'; // Assuming you have a logo image
 
 const stats = [
   {
@@ -60,15 +62,15 @@ const stats = [
 const infoBoxes = [
   {
     title: 'News Update',
-    items: ['News New'],
+    items: ['New GIS Mapping Feature Launched – view auto-plotted patta .','New FRA Atlas Dashboard – Live claim statistics now open to the public.'],
   },
   {
     title: 'Announcement',
-    items: ['xcxd', 'ANNOUNCEMENT', 'ANNOUNCEMENT'],
+    items: ['FRA Claims Training Workshop – Scheduled for 15 October 2025 in Bhubaneswar, Odisha.', 'Multi-Lingual Portal Live – FRA services now available in Hindi, Telugu, and Odia.'],
   },
   {
     title: 'Notice / Tender',
-    items: ['LE/II-10/2022-490/New'],
+    items: ['Circular FRA/2025/002 – Guidelines-digital submission of FRA claims via VanMitra portal','Tender FRA/2025/005 – Procurement of satellite imagery services for FRA monitoring.'],
   },
 ];
 
@@ -94,12 +96,25 @@ const Home = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Top Navigation Bar */}
       <nav className="w-full bg-white shadow-sm px-6 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <TreePine className="w-7 h-7 text-primary" />
-          <span className="font-bold text-xl text-primary">VanMitra Insight Hub</span>
+        {/* Logo Section */}
+        <div className="flex items-center">
+          <img
+            src={MoTA_logo}
+            alt="MoTA Logo"
+            className="h-12 w-auto object-contain"
+          />
+
         </div>
+
         <div className="flex items-center gap-4">
-          <Button variant="ghost" onClick={() => window.location.href = '/'}>Home</Button>
+          <Button
+      variant="ghost"
+      onClick={() => window.location.href = '/'}
+      className="flex items-center gap-2"
+    >
+      <HomeIcon className="w-4 h-4" />
+      <span>Home</span>
+    </Button>
           <Button variant="ghost" size="sm" onClick={() => navigate('/fra-atlas')}>FRA Atlas</Button>
 
           <Button
@@ -185,7 +200,7 @@ const Home = () => {
 
 
       {/* Stats Section */}
-      <section className="w-full bg-white py-10 px-4">
+      <section className="w-full bg-gray-300 py-10 px-4">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat) => (
             <div
@@ -204,7 +219,7 @@ const Home = () => {
       </section>
 
       {/* Info Boxes */}
-      <section className="w-full py-10 px-4 ">
+      <section className="w-full py-10 px-4 bg-gray-300">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
           {infoBoxes.map((box, idx) => (
             <div
@@ -352,8 +367,8 @@ const Home = () => {
             </CardContent>
           </Card>
 
-          
-          
+
+
         </div>
       </section>
 

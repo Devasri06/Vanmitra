@@ -35,6 +35,10 @@ import {
   Activity,
   TreePine,
   Upload,
+  Trash2,
+  Send,
+  Edit2,
+  FilePlus2,
 } from "lucide-react";
 import FRAMap from "./FRAMap"; // 👈 use FRAMap now, not FraAtlas
 import ClaimsTable from "./ClaimsTable";
@@ -44,20 +48,20 @@ const AdminDashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
 
-const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
+  const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
 
   // Form state for Digitization
   const [formData, setFormData] = useState({
-  name: "",
-  state: "",
-  district: "",
-  village: "",
-  block: "",
-  dateOfSignature: "",
+    name: "",
+    state: "",
+    district: "",
+    village: "",
+    block: "",
+    dateOfSignature: "",
     coordinates: "",   // ✅ add this line
 
-  documents: { patta: null as File | null },
-});
+    documents: { patta: null as File | null },
+  });
 
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -74,89 +78,89 @@ const [uploadedFilename, setUploadedFilename] = useState<string | null>(null);
   };
 
   const handleFileChange = (field: string, files: FileList | null) => {
-  if (!files || files.length === 0) return;
+    if (!files || files.length === 0) return;
 
-  const file = files[0];
-  setFormData((prev) => ({
-    ...prev,
-    documents: {
-      ...prev.documents,
-      [field]: file,
-    },
-  }));
-
-  // ✅ update this so Scan button knows a file is uploaded
-  setUploadedFilename(file.name);
-};
-
-
-const handleScanFile = async () => {
-  if (!formData.documents.patta) {
-    alert("Please upload a file first!");
-    return;
-  }
-
-  const file = formData.documents.patta;
-  const formDataUpload = new FormData();
-  formDataUpload.append("file", file);
-
-  try {
-    // STEP 1: Upload
-    const uploadRes = await fetch("http://127.0.0.1:8000/upload-patta/", {
-      method: "POST",
-      body: formDataUpload,
-    });
-
-    if (!uploadRes.ok) {
-      throw new Error(`Upload failed: ${uploadRes.status}`);
-    }
-
-    const uploadData = await uploadRes.json();
-    const filename = uploadData.filename;
-    setUploadedFilename(filename);
-
-    // STEP 2: Scan
-    const scanRes = await fetch(`http://127.0.0.1:8000/scan-file/${filename}`, {
-      method: "POST",
-    });
-
-    if (!scanRes.ok) {
-      throw new Error(`Scan failed: ${scanRes.status}`);
-    }
-
-    const scanData = await scanRes.json();
-    console.log("Scan result:", scanData);
-
-    // ✅ auto-fill form with parsed data
+    const file = files[0];
     setFormData((prev) => ({
-  ...prev,
-  name: scanData.data?.name || prev.name,
-  state: scanData.data?.state || prev.state,
-  district: scanData.data?.district || prev.district,
-  village: scanData.data?.village || prev.village,
-  block: scanData.data?.block || prev.block,
-  dateOfSignature: scanData.data?.signature_date || prev.dateOfSignature,
-    coordinates: scanData.data?.coordinates || prev.coordinates,  // ✅ add
+      ...prev,
+      documents: {
+        ...prev.documents,
+        [field]: file,
+      },
+    }));
 
-}));
-// inside handleScanFile after setFormData(...)
-if (scanData.data?.coordinates) {
-  const [lon, lat] = scanData.data.coordinates.split(",").map(Number); // <-- swap
-  window.dispatchEvent(
-    new CustomEvent("show-scanned-location", {
-      detail: { lat, lng: lon }, // pass as {lat, lng}
-    })
-  );
-}
+    // ✅ update this so Scan button knows a file is uploaded
+    setUploadedFilename(file.name);
+  };
 
 
+  const handleScanFile = async () => {
+    if (!formData.documents.patta) {
+      alert("Please upload a file first!");
+      return;
+    }
 
-    alert("File scanned and form updated!");
-  } catch (error) {
-    console.error("Scan failed:", error);
-    alert("Failed to scan file. See console for details.");
-  }
-};
+    const file = formData.documents.patta;
+    const formDataUpload = new FormData();
+    formDataUpload.append("file", file);
+
+    try {
+      // STEP 1: Upload
+      const uploadRes = await fetch("http://127.0.0.1:8000/upload-patta/", {
+        method: "POST",
+        body: formDataUpload,
+      });
+
+      if (!uploadRes.ok) {
+        throw new Error(`Upload failed: ${uploadRes.status}`);
+      }
+
+      const uploadData = await uploadRes.json();
+      const filename = uploadData.filename;
+      setUploadedFilename(filename);
+
+      // STEP 2: Scan
+      const scanRes = await fetch(`http://127.0.0.1:8000/scan-file/${filename}`, {
+        method: "POST",
+      });
+
+      if (!scanRes.ok) {
+        throw new Error(`Scan failed: ${scanRes.status}`);
+      }
+
+      const scanData = await scanRes.json();
+      console.log("Scan result:", scanData);
+
+      // ✅ auto-fill form with parsed data
+      setFormData((prev) => ({
+        ...prev,
+        name: scanData.data?.name || prev.name,
+        state: scanData.data?.state || prev.state,
+        district: scanData.data?.district || prev.district,
+        village: scanData.data?.village || prev.village,
+        block: scanData.data?.block || prev.block,
+        dateOfSignature: scanData.data?.signature_date || prev.dateOfSignature,
+        coordinates: scanData.data?.coordinates || prev.coordinates,  // ✅ add
+
+      }));
+      // inside handleScanFile after setFormData(...)
+      if (scanData.data?.coordinates) {
+        const [lon, lat] = scanData.data.coordinates.split(",").map(Number); // <-- swap
+        window.dispatchEvent(
+          new CustomEvent("show-scanned-location", {
+            detail: { lat, lng: lon }, // pass as {lat, lng}
+          })
+        );
+      }
+
+
+
+      alert("File scanned and form updated!");
+    } catch (error) {
+      console.error("Scan failed:", error);
+      alert("Failed to scan file. See console for details.");
+    }
+  };
 
 
 
@@ -166,57 +170,57 @@ if (scanData.data?.coordinates) {
   };
 
   const handleValidateSave = async () => {
-  const newErrors: { [key: string]: string } = {};
-  if (!formData.name) newErrors.name = "Name is required";
-  if (!formData.state) newErrors.state = "State is required";
-  if (!formData.district) newErrors.district = "District is required";
-  if (!formData.village) newErrors.village = "Village is required";
+    const newErrors: { [key: string]: string } = {};
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.state) newErrors.state = "State is required";
+    if (!formData.district) newErrors.district = "District is required";
+    if (!formData.village) newErrors.village = "Village is required";
 
-  if (!formData.documents.patta)
-    newErrors.patta = "Patta document is required";
+    if (!formData.documents.patta)
+      newErrors.patta = "Patta document is required";
 
-  setErrors(newErrors);
+    setErrors(newErrors);
 
-  if (Object.keys(newErrors).length === 0) {
-    try {
-      // 1️⃣ Optimistic marker on map (before backend call)
-      if (formData.coordinates) {
-        const [lon, lat] = formData.coordinates.split(",").map(Number);
-        window.dispatchEvent(
-          new CustomEvent("finalize-scanned-location", {
-            detail: { lat, lng: lon },
-          })
-        );
-        console.log("📍 Optimistically added marker:", lat, lon);
+    if (Object.keys(newErrors).length === 0) {
+      try {
+        // 1️⃣ Optimistic marker on map (before backend call)
+        if (formData.coordinates) {
+          const [lon, lat] = formData.coordinates.split(",").map(Number);
+          window.dispatchEvent(
+            new CustomEvent("finalize-scanned-location", {
+              detail: { lat, lng: lon },
+            })
+          );
+          console.log("📍 Optimistically added marker:", lat, lon);
+        }
+
+        // 2️⃣ Save to backend
+        const res = await fetch("http://localhost:8000/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        if (!res.ok) throw new Error(`Save failed: ${res.status}`);
+        const result = await res.json();
+
+        alert("Form validated and saved successfully!");
+        console.log("Saved:", result);
+
+        // 3️⃣ Force refresh from backend to ensure data consistency
+        if (window.myFRAMap) {
+          console.log("🔄 Forcing FRA map refresh after save...");
+          window.myFRAMap.loadGeoJson(true);
+        } else {
+          console.warn("⚠️ FRA map not mounted yet.");
+        }
+      } catch (err) {
+        console.error("Save failed:", err);
+        alert("Save failed! See console for details.");
       }
-
-      // 2️⃣ Save to backend
-      const res = await fetch("http://localhost:8000/save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (!res.ok) throw new Error(`Save failed: ${res.status}`);
-      const result = await res.json();
-
-      alert("Form validated and saved successfully!");
-      console.log("Saved:", result);
-
-      // 3️⃣ Force refresh from backend to ensure data consistency
-      if (window.myFRAMap) {
-        console.log("🔄 Forcing FRA map refresh after save...");
-        window.myFRAMap.loadGeoJson(true);
-      } else {
-        console.warn("⚠️ FRA map not mounted yet.");
-      }
-    } catch (err) {
-      console.error("Save failed:", err);
-      alert("Save failed! See console for details.");
+      console.log("✅ Save finished, map refresh triggered");
     }
-    console.log("✅ Save finished, map refresh triggered");
-  }
-};
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-accent/5">
@@ -421,8 +425,8 @@ if (scanData.data?.coordinates) {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Left Column: FRA Map */}
                   <div className="h-[300px] sm:h-[400px] md:h-[600px] border rounded-lg">
-  <FRAMap initialCoordinates={formData.coordinates} />
-</div>
+                    <FRAMap initialCoordinates={formData.coordinates} />
+                  </div>
 
 
                   {/* Right Column: Upload + Form */}
@@ -449,16 +453,16 @@ if (scanData.data?.coordinates) {
                         Upload Patta
                       </Button>
                       {/* 🔍 Scan Patta button */}
-<Button
-  variant="secondary"
-  size="lg"
-  onClick={handleScanFile}
-  disabled={!uploadedFilename}   // disable until file is uploaded
-  className="w-full mt-2"
->
-  🔍 {uploadedFilename ? "Scan Patta" : "Upload First to Scan"}
-</Button>
-                      
+                      <Button
+                        variant="secondary"
+                        size="lg"
+                        onClick={handleScanFile}
+                        disabled={!uploadedFilename}   // disable until file is uploaded
+                        className="w-full mt-2"
+                      >
+                        🔍 {uploadedFilename ? "Scan Patta" : "Upload First to Scan"}
+                      </Button>
+
                       {errors.patta && (
                         <p className="text-xs text-red-600 mt-2">
                           {errors.patta}
@@ -521,29 +525,29 @@ if (scanData.data?.coordinates) {
                       )}
 
                       <Input
-  name="block"
-  placeholder="Block"
-  value={formData.block}
-  onChange={handleInputChange}
-/>
-<Input
-  type="date"
-  name="dateOfSignature"
-  placeholder="Date of Digital Signature"
-  value={formData.dateOfSignature}
-  onChange={handleInputChange}
-/>
+                        name="block"
+                        placeholder="Block"
+                        value={formData.block}
+                        onChange={handleInputChange}
+                      />
+                      <Input
+                        type="date"
+                        name="dateOfSignature"
+                        placeholder="Date of Digital Signature"
+                        value={formData.dateOfSignature}
+                        onChange={handleInputChange}
+                      />
 
 
-                    {/* Validate & Save Button */}
-                    <Button
-                      onClick={handleValidateSave}
-                      className="w-full mt-4"
-                    >
-                      Validate & Save
-                    </Button>
+                      {/* Validate & Save Button */}
+                      <Button
+                        onClick={handleValidateSave}
+                        className="w-full mt-4"
+                      >
+                        Validate & Save
+                      </Button>
+                    </div>
                   </div>
-                   </div> 
                 </div>
               </CardContent>
             </Card>
@@ -647,30 +651,99 @@ if (scanData.data?.coordinates) {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
-                  <Activity className="w-5 h-5" />
+                  <Activity className="w-5 h-5 text-primary" />
                   <span>Recent Administrative Activity</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {activityLogs.map((log, index) => (
-                    <div
-                      key={index}
-                      className="flex items-start space-x-3 border-b pb-2"
-                    >
-                      <Eye className="w-4 h-4 mt-1 text-muted-foreground" />
-                      <div>
-                        <p className="text-sm">{log.action}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {log.timestamp}
-                        </p>
+                  {activityLogs.map((log, index) => {
+                    // Pick an icon depending on action type
+                    let Icon = Eye;
+                    let color = "text-muted-foreground";
+
+                    const actionLower = log.action.toLowerCase();
+                    if (actionLower.includes("approved")) {
+                      Icon = CheckCircle;
+                      color = "text-green-500";
+                    } else if (actionLower.includes("rejected")) {
+                      Icon = XCircle;
+                      color = "text-red-500";
+                    } else if (actionLower.includes("uploaded")) {
+                      Icon = Upload;
+                      color = "text-blue-500";
+                    } else if (actionLower.includes("created")) {
+                      Icon = FilePlus2;
+                      color = "text-purple-500";
+                    } else if (actionLower.includes("edited")) {
+                      Icon = Edit2;
+                      color = "text-yellow-500";
+                    } else if (actionLower.includes("deleted")) {
+                      Icon = Trash2;
+                      color = "text-pink-500";
+                    } else if (actionLower.includes("review")) {
+                      Icon = Send;
+                      color = "text-indigo-500";
+                    }
+
+                    return (
+                      <div
+                        key={index}
+                        className="flex items-start space-x-3 border-b pb-3 last:border-none last:pb-0"
+                      >
+                        <div className={`p-2 rounded-full bg-muted ${color}`}>
+                          <Icon className="w-4 h-4 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">{log.action}</p>
+                          <p className="text-xs text-muted-foreground">{log.timestamp}</p>
+                        </div>
+                        {/* Badge for quick status glance */}
+                        <div>
+                          {actionLower.includes("approved") && (
+                            <Badge variant="outline" className="text-green-600 border-green-600">
+                              Approved
+                            </Badge>
+                          )}
+                          {actionLower.includes("rejected") && (
+                            <Badge variant="outline" className="text-red-600 border-red-600">
+                              Rejected
+                            </Badge>
+                          )}
+                          {actionLower.includes("uploaded") && (
+                            <Badge variant="outline" className="text-blue-600 border-blue-600">
+                              Uploaded
+                            </Badge>
+                          )}
+                          {actionLower.includes("created") && (
+                            <Badge variant="outline" className="text-purple-600 border-purple-600">
+                              Created
+                            </Badge>
+                          )}
+                          {actionLower.includes("edited") && (
+                            <Badge variant="outline" className="text-yellow-600 border-yellow-600">
+                              Edited
+                            </Badge>
+                          )}
+                          {actionLower.includes("deleted") && (
+                            <Badge variant="outline" className="text-pink-600 border-pink-600">
+                              Deleted
+                            </Badge>
+                          )}
+                          {actionLower.includes("review") && (
+                            <Badge variant="outline" className="text-indigo-600 border-indigo-600">
+                              Sent for Review
+                            </Badge>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
+
         </Tabs>
       </div>
     </div>
