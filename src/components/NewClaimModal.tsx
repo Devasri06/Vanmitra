@@ -136,173 +136,173 @@ const NewClaimModal = ({ open, onOpenChange }: NewClaimModalProps) => {
   };
 
   // Step 1
-// Step 1
-const renderStep1 = () => (
-  <div className="space-y-4">
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {/* Claim Type */}
-      <div className="space-y-2">
-        <Label htmlFor="claimType" className="flex items-center gap-2">
-          <FileCheck className="w-4 h-4 text-primary" /> Claim Type
-        </Label>
-        <Select
-          value={formData.claimType}
-          onValueChange={(value) =>
-            setFormData((p) => ({ ...p, claimType: value }))
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select claim type" />
-          </SelectTrigger>
-          <SelectContent>
-            {claimTypes.map((type) => (
-              <SelectItem key={type} value={type}>
-                {type}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+  // Step 1
+  const renderStep1 = () => (
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Claim Type */}
+        <div className="space-y-2">
+          <Label htmlFor="claimType" className="flex items-center gap-2">
+            <FileCheck className="w-4 h-4 text-primary" /> Claim Type
+          </Label>
+          <Select
+            value={formData.claimType}
+            onValueChange={(value) =>
+              setFormData((p) => ({ ...p, claimType: value }))
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select claim type" />
+            </SelectTrigger>
+            <SelectContent>
+              {claimTypes.map((type) => (
+                <SelectItem key={type} value={type}>
+                  {type}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Applicant Name */}
+        <div className="space-y-2">
+          <Label htmlFor="applicantName" className="flex items-center gap-2">
+            <User className="w-4 h-4 text-primary" /> Applicant Name
+          </Label>
+          <Input
+            id="applicantName"
+            value={formData.applicantName}
+            onChange={(e) =>
+              setFormData((p) => ({ ...p, applicantName: e.target.value }))
+            }
+          />
+        </div>
       </div>
 
-      {/* Applicant Name */}
-      <div className="space-y-2">
-        <Label htmlFor="applicantName" className="flex items-center gap-2">
-          <User className="w-4 h-4 text-primary" /> Applicant Name
-        </Label>
-        <Input
-          id="applicantName"
-          value={formData.applicantName}
-          onChange={(e) =>
-            setFormData((p) => ({ ...p, applicantName: e.target.value }))
-          }
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Father's/Husband's Name */}
+        <div className="space-y-2">
+          <Label htmlFor="fatherName" className="flex items-center gap-2">
+            <User className="w-4 h-4 text-primary" /> Father/Husband Name
+          </Label>
+          <Input
+            id="fatherName"
+            value={formData.fatherName}
+            onChange={(e) =>
+              setFormData((p) => ({ ...p, fatherName: e.target.value }))
+            }
+          />
+        </div>
+
+        {/* Tribal Group */}
+        <div className="space-y-2">
+          <Label htmlFor="tribalGroup" className="flex items-center gap-2">
+            <Users className="w-4 h-4 text-primary" /> Tribal Group
+          </Label>
+          <Select
+            value={formData.tribalGroup}
+            onValueChange={(value) =>
+              setFormData((p) => ({ ...p, tribalGroup: value }))
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select tribal group" />
+            </SelectTrigger>
+            <SelectContent>
+              {tribalGroups.map((group) => (
+                <SelectItem key={group} value={group}>
+                  {group}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* State */}
+        <div className="space-y-2">
+          <Label htmlFor="state" className="flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-primary" /> State
+          </Label>
+          <Select
+            value={formData.state}
+            onValueChange={(value) =>
+              setFormData((p) => ({ ...p, state: value, district: '', block: '' }))
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select state" />
+            </SelectTrigger>
+            <SelectContent>
+              {states.map((state) => (
+                <SelectItem key={state} value={state}>
+                  {state}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* District */}
+        <div className="space-y-2">
+          <Label htmlFor="district" className="flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-primary" /> District
+          </Label>
+          <Select
+            value={formData.district}
+            onValueChange={(value) =>
+              setFormData((p) => ({ ...p, district: value }))
+            }
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select district" />
+            </SelectTrigger>
+            <SelectContent>
+              {formData.state &&
+                districts[formData.state as keyof typeof districts]?.map(
+                  (district) => (
+                    <SelectItem key={district} value={district}>
+                      {district}
+                    </SelectItem>
+                  )
+                )}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Block */}
+        <div className="space-y-2">
+          <Label htmlFor="block" className="flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-primary" /> Block
+          </Label>
+          <Input
+            id="block"
+            value={(formData as any).block || ''}
+            onChange={(e) =>
+              setFormData((p) => ({ ...p, block: e.target.value }))
+            }
+          />
+        </div>
+
+        {/* Village */}
+        <div className="space-y-2">
+          <Label htmlFor="village" className="flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-primary" /> Village
+          </Label>
+          <Input
+            id="village"
+            value={formData.village}
+            onChange={(e) =>
+              setFormData((p) => ({ ...p, village: e.target.value }))
+            }
+          />
+        </div>
       </div>
     </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {/* Father's/Husband's Name */}
-      <div className="space-y-2">
-        <Label htmlFor="fatherName" className="flex items-center gap-2">
-          <User className="w-4 h-4 text-primary" /> Father/Husband Name
-        </Label>
-        <Input
-          id="fatherName"
-          value={formData.fatherName}
-          onChange={(e) =>
-            setFormData((p) => ({ ...p, fatherName: e.target.value }))
-          }
-        />
-      </div>
-
-      {/* Tribal Group */}
-      <div className="space-y-2">
-        <Label htmlFor="tribalGroup" className="flex items-center gap-2">
-          <Users className="w-4 h-4 text-primary" /> Tribal Group
-        </Label>
-        <Select
-          value={formData.tribalGroup}
-          onValueChange={(value) =>
-            setFormData((p) => ({ ...p, tribalGroup: value }))
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select tribal group" />
-          </SelectTrigger>
-          <SelectContent>
-            {tribalGroups.map((group) => (
-              <SelectItem key={group} value={group}>
-                {group}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {/* State */}
-      <div className="space-y-2">
-        <Label htmlFor="state" className="flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-primary" /> State
-        </Label>
-        <Select
-          value={formData.state}
-          onValueChange={(value) =>
-            setFormData((p) => ({ ...p, state: value, district: '', block: '' }))
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select state" />
-          </SelectTrigger>
-          <SelectContent>
-            {states.map((state) => (
-              <SelectItem key={state} value={state}>
-                {state}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      {/* District */}
-      <div className="space-y-2">
-        <Label htmlFor="district" className="flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-primary" /> District
-        </Label>
-        <Select
-          value={formData.district}
-          onValueChange={(value) =>
-            setFormData((p) => ({ ...p, district: value }))
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select district" />
-          </SelectTrigger>
-          <SelectContent>
-            {formData.state &&
-              districts[formData.state as keyof typeof districts]?.map(
-                (district) => (
-                  <SelectItem key={district} value={district}>
-                    {district}
-                  </SelectItem>
-                )
-              )}
-          </SelectContent>
-        </Select>
-      </div>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {/* Block */}
-      <div className="space-y-2">
-        <Label htmlFor="block" className="flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-primary" /> Block
-        </Label>
-        <Input
-          id="block"
-          value={(formData as any).block || ''}
-          onChange={(e) =>
-            setFormData((p) => ({ ...p, block: e.target.value }))
-          }
-        />
-      </div>
-
-      {/* Village */}
-      <div className="space-y-2">
-        <Label htmlFor="village" className="flex items-center gap-2">
-          <MapPin className="w-4 h-4 text-primary" /> Village
-        </Label>
-        <Input
-          id="village"
-          value={formData.village}
-          onChange={(e) =>
-            setFormData((p) => ({ ...p, village: e.target.value }))
-          }
-        />
-      </div>
-    </div>
-  </div>
-);
+  );
 
 
   // Step 2
